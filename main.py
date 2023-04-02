@@ -1,5 +1,6 @@
 # Importando Tkinter
 from tkinter import *
+from tkinter import ttk
 from tkcalendar import DateEntry
 
 ################# cores ###############
@@ -105,4 +106,36 @@ delete_button = Button(frame_baixo, text="Deletar", width=10, font='Ivy 9 bold',
                        overrelief='ridge')
 delete_button.place(x=209, y=440)
 
+################# Frame Direita ###############
+
+tabela_header = ['Livro', 'Autor', 'Editora', 'Gênero', 'Data', 'País']
+
+tree = ttk.Treeview(frame_direita, selectmode='extended', columns=tabela_header, show='headings')
+
+# Vertical Scroll Bar
+vsb = ttk.Scrollbar(frame_direita, orient='vertical', command=tree.yview)
+
+# Horizontal Scroll Bar
+hsb = ttk.Scrollbar(frame_direita, orient='horizontal', command=tree.xview)
+
+tree.configure(yscrollcommand=vsb.set, xscrollcommand=hsb.set)
+
+tree.grid(column=0, row=0, sticky='nsew')
+vsb.grid(column=1, row=0, sticky='ns')
+hsb.grid(column=0, row=1, sticky='ew')
+
+frame_direita.grid_rowconfigure(0, weight=12)
+
+hd = ['nw', 'nw', 'nw', 'nw', 'nw', 'nw']
+h = [170, 140, 140, 100, 120, 100]
+n = 0
+
+for col in tabela_header:
+    tree.heading(col, text=col.title(), anchor=CENTER)
+    # adjust the column's width to the header string
+    tree.column(col, width=h[n], anchor=hd[n])
+    n += 1
+
 janela.mainloop()
+
+
