@@ -8,5 +8,5 @@ con = lite.connect('dados.db')
 with con:
     cur = con.cursor()
     cur.execute('CREATE TABLE biblioteca(ID INTEGER PRIMARY KEY AUTOINCREMENT,\
-     Livro TEXT, Autor TEXT, Editora TEXT, Genero TEXT, Ano DATE, Pais TEXT)')
+     Livro TEXT, Autor TEXT, Editora TEXT, Genero TEXT, Data DATE, Pais TEXT)')
 
