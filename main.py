@@ -108,7 +108,7 @@ delete_button.place(x=209, y=440)
 
 ################# Frame Direita ###############
 
-tabela_header = ['Livro', 'Autor', 'Editora', 'Gênero', 'Data', 'País']
+tabela_header = ['ID', 'Livro', 'Autor', 'Editora', 'Gênero', 'Data', 'País']
 
 tree = ttk.Treeview(frame_direita, selectmode='extended', columns=tabela_header, show='headings')
 
@@ -126,8 +126,8 @@ hsb.grid(column=0, row=1, sticky='ew')
 
 frame_direita.grid_rowconfigure(0, weight=12)
 
-hd = ['nw', 'nw', 'nw', 'nw', 'nw', 'nw']
-h = [170, 140, 140, 100, 120, 100]
+hd = ['nw', 'nw', 'nw', 'nw', 'nw', 'nw', 'nw']
+h = [30, 170, 140, 140, 100, 120, 100]
 n = 0
 
 for col in tabela_header:
