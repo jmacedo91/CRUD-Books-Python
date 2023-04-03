@@ -10,29 +10,36 @@ import sqlite3 as lite
 # Criando conexão
 con = lite.connect('dados.db')
 
-lista = ['Fragmentos do Horror', 'Junji Ito', 'Darkside Books', 'Terror', '03/03/1991', 'Brasil']
 
 # Inserir Dados (Create)
-# lista = ['Fragmentos do Horror', 'Junji Ito', 'Darkside Books', 'Terror', '03/03/1991', 'Brasil']
-# with con:
-#     cur = con.cursor()
-#     query = "INSERT INTO biblioteca (Livro, Autor, Editora, Genero, Data, Pais) VALUES (?, ?, ?, ?, ?, ?)"
-#     cur.execute(query, lista)
+def inserir_info(i):
+    with con:
+        cur = con.cursor()
+        query = "INSERT INTO biblioteca (Livro, Autor, Editora, Genero, Data, Pais) VALUES (?, ?, ?, ?, ?, ?)"
+        cur.execute(query, i)
+
 
 # Ler Dados (Read)
+def mostrar_info():
+    lista = []
+    with con:
+        cur = con.cursor()
+        query = "SELECT * FROM biblioteca"
+        cur.execute(query)
+        informacao = cur.fetchall()
+
+        for i in informacao:
+            lista.append(i)
+    return lista
+
+
+'''
+# Atualizar Dados (Update)
+lista = ['Contos de Terror', 1]
 with con:
     cur = con.cursor()
-    query = "SELECT * FROM biblioteca"
-    cur.execute(query)
-    informacao = cur.fetchall()
-    print(informacao)
-
-# Atualizar Dados (Update)
-# lista = ['Contos de Terror', 1]
-# with con:
-#     cur = con.cursor()
-#     query = "UPDATE biblioteca SET Livro=? WHERE id=?"
-#     cur.execute(query, lista)
+    query = "UPDATE biblioteca SET Livro=? WHERE id=?"
+    cur.execute(query, lista)
 
 # Deletar Dados (Delete)
 lista = [1]
@@ -40,3 +47,4 @@ with con:
     cur = con.cursor()
     query = "DELETE FROM biblioteca WHERE id=?"
     cur.execute(query, lista)
+'''

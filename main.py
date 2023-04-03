@@ -2,6 +2,10 @@
 from tkinter import *
 from tkinter import ttk
 from tkcalendar import DateEntry
+from tkinter import messagebox
+
+# importando views
+from view import *
 
 ################# cores ###############
 co0 = "#f0f3f5"  # cinza
@@ -20,7 +24,7 @@ co10 = "#000000"  # preta
 
 janela = Tk()
 janela.title("Johnny's Library")
-janela.geometry('1043x543')
+janela.geometry('1130x545')
 janela.configure(background=co9)
 janela.resizable(width=FALSE, height=FALSE) # Bloqueia a alteração do geometry
 
@@ -39,6 +43,37 @@ frame_direita.grid(row=0, column=1, rowspan=2, padx=1, sticky=NSEW)
 
 app_nome = Label(frame_cima, text="Johnny's Library", anchor=NW, font='Ivy 13 bold', bg=co10, fg=co1, relief='flat')
 app_nome.place(x=10, y=20)
+
+# Função Inserir
+
+def inserir():
+    livro = entry_livro.get()
+    autor = entry_autor.get()
+    editora = entry_editora.get()
+    genero = entry_genero.get()
+    data = entry_data.get()
+    pais = entry_pais.get()
+
+    lista = [livro, autor, editora, genero, data, pais]
+
+    if livro == '':
+        messagebox.showerror("Nome Ausente", "Inserir o nome do livro.")
+    else:
+        inserir_info(lista)
+        messagebox.showinfo('Cadastro realizado com sucesso!', 'Livro inserido em sua biblioteca')
+
+        entry_livro.delete(0, 'end')
+        entry_autor.delete(0, 'end')
+        entry_editora.delete(0, 'end')
+        entry_genero.delete(0, 'end')
+        entry_data.delete(0, 'end')
+        entry_pais.delete(0, 'end')
+
+    for widget in frame_direita.winfo_children():
+        widget.destroy()
+
+    mostrar()
+
 
 ################# Configurando Frame Baixo ###############
 
@@ -84,57 +119,59 @@ label_data.place(x=10, y=310)
 entry_data = DateEntry(frame_baixo, width=42, background='darkblue', foreground='white', borderwidth=2)
 entry_data.place(x=15, y=340)
 
-# Consulta
-
-label_consulta = Label(frame_baixo, text='Consulta *', anchor=NW, font='Ivy 10 bold', bg=co1, fg=co4, relief='flat')
-label_consulta.place(x=10, y=370)
-
-entry_consulta = Entry(frame_baixo, width=45, justify='left', relief='solid')
-entry_consulta.place(x=15, y=400)
-
 ################# Botões do Frame Baixo ###############
 
 insert_button = Button(frame_baixo, text="Inserir", width=10, font='Ivy 9 bold', bg=co6, fg=co1, relief='raised',
-                       overrelief='ridge')
-insert_button.place(x=15, y=440)
+                       overrelief='ridge', command=inserir)
+insert_button.place(x=15, y=410)
 
 update_button = Button(frame_baixo, text="Atualizar", width=10, font='Ivy 9 bold', bg=co2, fg=co1, relief='raised',
                        overrelief='ridge')
-update_button.place(x=112, y=440)
+update_button.place(x=112, y=410)
 
 delete_button = Button(frame_baixo, text="Deletar", width=10, font='Ivy 9 bold', bg=co7, fg=co1, relief='raised',
                        overrelief='ridge')
-delete_button.place(x=209, y=440)
+delete_button.place(x=209, y=410)
 
 ################# Frame Direita ###############
 
-tabela_header = ['ID', 'Livro', 'Autor', 'Editora', 'Gênero', 'Data', 'País']
+def mostrar():
+    lista = mostrar_info()
 
-tree = ttk.Treeview(frame_direita, selectmode='extended', columns=tabela_header, show='headings')
+    tabela_header = ['ID', 'Livro', 'Autor', 'Editora', 'Gênero', 'Data', 'País']
 
-# Vertical Scroll Bar
-vsb = ttk.Scrollbar(frame_direita, orient='vertical', command=tree.yview)
+    tree = ttk.Treeview(frame_direita, selectmode='extended', columns=tabela_header, show='headings')
 
-# Horizontal Scroll Bar
-hsb = ttk.Scrollbar(frame_direita, orient='horizontal', command=tree.xview)
+    # Vertical Scroll Bar
+    vsb = ttk.Scrollbar(frame_direita, orient='vertical', command=tree.yview)
 
-tree.configure(yscrollcommand=vsb.set, xscrollcommand=hsb.set)
+    # Horizontal Scroll Bar
+    hsb = ttk.Scrollbar(frame_direita, orient='horizontal', command=tree.xview)
 
-tree.grid(column=0, row=0, sticky='nsew')
-vsb.grid(column=1, row=0, sticky='ns')
-hsb.grid(column=0, row=1, sticky='ew')
+    tree.configure(yscrollcommand=vsb.set, xscrollcommand=hsb.set)
 
-frame_direita.grid_rowconfigure(0, weight=12)
+    tree.grid(column=0, row=0, sticky='nsew')
+    vsb.grid(column=1, row=0, sticky='ns')
+    hsb.grid(column=0, row=1, sticky='ew')
 
-hd = ['nw', 'nw', 'nw', 'nw', 'nw', 'nw', 'nw']
-h = [30, 170, 140, 140, 100, 120, 100]
-n = 0
+    frame_direita.grid_rowconfigure(0, weight=12)
 
-for col in tabela_header:
-    tree.heading(col, text=col.title(), anchor=CENTER)
-    # adjust the column's width to the header string
-    tree.column(col, width=h[n], anchor=hd[n])
-    n += 1
+    hd = ['nw', 'nw', 'nw', 'nw', 'nw', 'nw', 'nw']
+    h = [30, 170, 140, 120, 120, 120, 100]
+    n = 0
+
+    for col in tabela_header:
+        tree.heading(col, text=col.title(), anchor=CENTER)
+        # adjust the column's width to the header string
+        tree.column(col, width=h[n], anchor=hd[n])
+        n += 1
+
+    for item in lista:
+        tree.insert('', 'end', values=item)
+
+
+# chamando a função mostrar
+mostrar()
 
 janela.mainloop()
 
