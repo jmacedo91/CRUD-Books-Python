@@ -7,7 +7,8 @@ from tkinter import messagebox
 # importando views
 from view import *
 
-################# cores ###############
+# Cores
+
 co0 = "#f0f3f5"  # cinza
 co1 = "#feffff"  # branca
 co2 = "#4fa882"  # verde
@@ -20,15 +21,15 @@ co8 = "#263238"   # + verde
 co9 = "#e9edf5"   # sky blue
 co10 = "#000000"  # preta
 
-################# Criando Janela ###############
+# Criando Janela
 
 janela = Tk()
 janela.title("Johnny's Library")
 janela.geometry('1130x545')
 janela.configure(background=co9)
-janela.resizable(width=FALSE, height=FALSE) # Bloqueia a alteração do geometry
+janela.resizable(width=FALSE, height=FALSE)  # Bloqueia a alteração do geometry
 
-################# Dividindo a Janela ###############
+# Dividindo a Janela
 
 frame_cima = Frame(janela, width=310, height=50, bg=co10, relief='flat')
 frame_cima.grid(row=0, column=0)
@@ -39,12 +40,16 @@ frame_baixo.grid(row=1, column=0, sticky=NSEW, padx=0, pady=1)
 frame_direita = Frame(janela, width=588, height=493, bg=co1, relief='flat')
 frame_direita.grid(row=0, column=1, rowspan=2, padx=1, sticky=NSEW)
 
-################# Label Cima ###############
+# Label Cima
 
 app_nome = Label(frame_cima, text="Johnny's Library", anchor=NW, font='Ivy 13 bold', bg=co10, fg=co1, relief='flat')
 app_nome.place(x=10, y=20)
 
+# Variável tree global
+global tree
+
 # Função Inserir
+
 
 def inserir():
     livro = entry_livro.get()
@@ -74,8 +79,68 @@ def inserir():
 
     mostrar()
 
+# Função Atualizar
 
-################# Configurando Frame Baixo ###############
+
+def atualizar():
+    try:
+        treev_dados = tree.focus()
+        treev_dicionario = tree.item(treev_dados)
+        tree_lista = treev_dicionario['values']
+
+        valor_id = tree_lista[0]
+
+        entry_livro.delete(0, 'end')
+        entry_autor.delete(0, 'end')
+        entry_editora.delete(0, 'end')
+        entry_genero.delete(0, 'end')
+        entry_data.delete(0, 'end')
+        entry_pais.delete(0, 'end')
+
+        entry_livro.insert(0, tree_lista[1])
+        entry_autor.insert(0, tree_lista[2])
+        entry_editora.insert(0, tree_lista[3])
+        entry_genero.insert(0, tree_lista[4])
+        entry_data.insert(0, tree_lista[5])
+        entry_pais.insert(0, tree_lista[6])
+
+        def update():
+            livro = entry_livro.get()
+            autor = entry_autor.get()
+            editora = entry_editora.get()
+            genero = entry_genero.get()
+            data = entry_data.get()
+            pais = entry_pais.get()
+
+            lista = [livro, autor, editora, genero, data, pais, valor_id]
+
+            if livro == '':
+                messagebox.showerror("Nome Ausente", "Inserir o nome do livro.")
+            else:
+                atualizar_info(lista)
+                messagebox.showinfo('Sucesso!', 'Dados Atualizados com Sucesso!')
+
+                entry_livro.delete(0, 'end')
+                entry_autor.delete(0, 'end')
+                entry_editora.delete(0, 'end')
+                entry_genero.delete(0, 'end')
+                entry_data.delete(0, 'end')
+                entry_pais.delete(0, 'end')
+
+            for widget in frame_direita.winfo_children():
+                widget.destroy()
+
+            mostrar()
+
+        confirm_button = Button(frame_baixo, text="Confirmar", width=10, font='Ivy 9 bold', bg=co2, fg=co1,
+                                relief='raised', overrelief='ridge', command=update)
+        confirm_button.place(x=112, y=440)
+
+    except IndexError:
+        messagebox.showerror('Erro!', 'Selecionar um dos dados na tabela')
+
+
+# Configurando Frame Baixo
 
 # Livro
 label_livro = Label(frame_baixo, text='Livro *', anchor=NW, font='Ivy 10 bold', bg=co1, fg=co4, relief='flat')
@@ -119,23 +184,27 @@ label_data.place(x=10, y=310)
 entry_data = DateEntry(frame_baixo, width=42, background='darkblue', foreground='white', borderwidth=2)
 entry_data.place(x=15, y=340)
 
-################# Botões do Frame Baixo ###############
+# Botões do Frame Baixo
 
 insert_button = Button(frame_baixo, text="Inserir", width=10, font='Ivy 9 bold', bg=co6, fg=co1, relief='raised',
                        overrelief='ridge', command=inserir)
 insert_button.place(x=15, y=410)
 
 update_button = Button(frame_baixo, text="Atualizar", width=10, font='Ivy 9 bold', bg=co2, fg=co1, relief='raised',
-                       overrelief='ridge')
+                       overrelief='ridge', command=atualizar)
 update_button.place(x=112, y=410)
 
 delete_button = Button(frame_baixo, text="Deletar", width=10, font='Ivy 9 bold', bg=co7, fg=co1, relief='raised',
                        overrelief='ridge')
 delete_button.place(x=209, y=410)
 
-################# Frame Direita ###############
+# Frame Direita
+
 
 def mostrar():
+
+    global tree
+
     lista = mostrar_info()
 
     tabela_header = ['ID', 'Livro', 'Autor', 'Editora', 'Gênero', 'Data', 'País']
@@ -174,5 +243,3 @@ def mostrar():
 mostrar()
 
 janela.mainloop()
-
-

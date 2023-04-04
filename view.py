@@ -33,14 +33,14 @@ def mostrar_info():
     return lista
 
 
-'''
 # Atualizar Dados (Update)
-lista = ['Contos de Terror', 1]
-with con:
-    cur = con.cursor()
-    query = "UPDATE biblioteca SET Livro=? WHERE id=?"
-    cur.execute(query, lista)
+def atualizar_info(i):
+    with con:
+        cur = con.cursor()
+        query = "UPDATE biblioteca SET Livro=?, Autor=?, Editora=?, Genero=?, Data=?, Pais=? WHERE id=?"
+        cur.execute(query, i)
 
+'''
 # Deletar Dados (Delete)
 lista = [1]
 with con:
