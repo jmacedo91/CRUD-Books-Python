@@ -40,11 +40,9 @@ def atualizar_info(i):
         query = "UPDATE biblioteca SET Livro=?, Autor=?, Editora=?, Genero=?, Data=?, Pais=? WHERE id=?"
         cur.execute(query, i)
 
-'''
 # Deletar Dados (Delete)
-lista = [1]
-with con:
-    cur = con.cursor()
-    query = "DELETE FROM biblioteca WHERE id=?"
-    cur.execute(query, lista)
-'''
+def deletar_info(i):
+    with con:
+        cur = con.cursor()
+        query = "DELETE FROM biblioteca WHERE id=?"
+        cur.execute(query, i)

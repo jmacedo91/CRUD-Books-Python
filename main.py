@@ -132,17 +132,40 @@ def atualizar():
 
             mostrar()
 
-        confirm_button = Button(frame_baixo, text="Confirmar", width=10, font='Ivy 9 bold', bg=co2, fg=co1,
+        confirm_button = Button(frame_baixo, text="Confirmar", width=37, font='Ivy 9 bold', bg=co2, fg=co1,
                                 relief='raised', overrelief='ridge', command=update)
-        confirm_button.place(x=112, y=440)
+        confirm_button.place(x=18, y=447)
 
     except IndexError:
         messagebox.showerror('Erro!', 'Selecionar um dos dados na tabela')
 
+# Função Deletar
+
+
+def deletar():
+    try:
+        treev_dados = tree.focus()
+        treev_dicionario = tree.item(treev_dados)
+        tree_lista = treev_dicionario['values']
+
+        valor_id = tree_lista[0]
+
+        deletar_info([valor_id])
+        messagebox.showinfo('Sucesso!', 'Dados deletados da tabela com sucesso!')
+
+        for widget in frame_direita.winfo_children():
+            widget.destroy()
+
+        mostrar()
+
+    except IndexError:
+        messagebox.showerror('Erro!', 'Selecionar um dos dados na tabela')
 
 # Configurando Frame Baixo
 
 # Livro
+
+
 label_livro = Label(frame_baixo, text='Livro *', anchor=NW, font='Ivy 10 bold', bg=co1, fg=co4, relief='flat')
 label_livro.place(x=10, y=10)
 
@@ -150,6 +173,7 @@ entry_livro = Entry(frame_baixo, width=45, justify='left', relief='solid')
 entry_livro.place(x=15, y=40)
 
 # Autor
+
 label_autor = Label(frame_baixo, text='Autor *', anchor=NW, font='Ivy 10 bold', bg=co1, fg=co4, relief='flat')
 label_autor.place(x=10, y=70)
 
@@ -157,6 +181,7 @@ entry_autor = Entry(frame_baixo, width=45, justify='left', relief='solid')
 entry_autor.place(x=15, y=100)
 
 # Editora
+
 label_editora = Label(frame_baixo, text='Editora *', anchor=NW, font='Ivy 10 bold', bg=co1, fg=co4, relief='flat')
 label_editora.place(x=10, y=130)
 
@@ -164,6 +189,7 @@ entry_editora = Entry(frame_baixo, width=45, justify='left', relief='solid')
 entry_editora.place(x=15, y=160)
 
 # Gênero
+
 label_genero = Label(frame_baixo, text='Gênero *', anchor=NW, font='Ivy 10 bold', bg=co1, fg=co4, relief='flat')
 label_genero.place(x=10, y=190)
 
@@ -171,6 +197,7 @@ entry_genero = Entry(frame_baixo, width=45, justify='left', relief='solid')
 entry_genero.place(x=15, y=220)
 
 # País
+
 label_pais = Label(frame_baixo, text='País *', anchor=NW, font='Ivy 10 bold', bg=co1, fg=co4, relief='flat')
 label_pais.place(x=10, y=250)
 
@@ -178,6 +205,7 @@ entry_pais = Entry(frame_baixo, width=45, justify='left', relief='solid')
 entry_pais.place(x=15, y=280)
 
 # Data
+
 label_data = Label(frame_baixo, text='Data *', anchor=NW, font='Ivy 10 bold', bg=co1, fg=co4, relief='flat')
 label_data.place(x=10, y=310)
 
@@ -195,7 +223,7 @@ update_button = Button(frame_baixo, text="Atualizar", width=10, font='Ivy 9 bold
 update_button.place(x=112, y=410)
 
 delete_button = Button(frame_baixo, text="Deletar", width=10, font='Ivy 9 bold', bg=co7, fg=co1, relief='raised',
-                       overrelief='ridge')
+                       overrelief='ridge', command=deletar)
 delete_button.place(x=209, y=410)
 
 # Frame Direita
